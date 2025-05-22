@@ -61,10 +61,9 @@ Frontend ini berkomunikasi dengan backend API (yang dalam kasus ini kamu buat de
 
 Contoh penggunaan `Http` facade di controller Laravel untuk mengambil data dari backend:
 
+```use Illuminate\Support\Facades\Http;```
 
-use Illuminate\Support\Facades\Http;
-
-class UserController extends Controller
+```class UserController extends``` ```Controller
 {
     public function index()
     {
@@ -72,4 +71,4 @@ class UserController extends Controller
         $users = $response->json();
         return view('user.index', compact('users'));
     }
-}
+}```
