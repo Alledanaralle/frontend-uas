@@ -59,24 +59,19 @@ Berikut adalah langkah-langkah untuk menjalankan project frontend ini dari awal 
 
 Frontend ini berkomunikasi dengan backend API (yang dalam kasus ini kamu buat dengan CodeIgniter) melalui HTTP request. Konfigurasi dasar untuk terhubung ke backend (misalnya, URL base API) biasanya diletakkan di file `.env` atau langsung di dalam kode controller/service yang melakukan panggilan API.
 
+```php artisan make:controller NamaController```
+
 Contoh penggunaan `Http` facade di controller Laravel untuk mengambil data dari backend:
 
-```use Illuminate\Support\Facades\Http;```
+```php
+use Illuminate\Support\Facades\Http;
 
-```class UserController extends Controller```
-
-```{```
-
-```public function index()```
-    
-`{`
-    
-```$response = Http::get(env('BACKEND_API_URL')``` ```. '/user');```
-
-```$users = $response->json();```
-
-```return view('user.index', compact('users'));```
-
-```}```
-
-```}```
+class UserController extends Controller
+{
+    public function index()
+    {
+        $response = Http::get(env('BACKEND_API_URL') . '/user');
+        $users = $response->json();
+        return view('user.index', compact('users'));
+    }
+}
