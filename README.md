@@ -1,61 +1,75 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Simon Kehadiran (Frontend)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sebuah antarmuka pengguna (frontend) berbasis web yang dibangun dengan Laravel untuk aplikasi Simon Kehadiran. Aplikasi ini terhubung ke backend API (saat ini menggunakan CodeIgniter) untuk mengelola data user.
 
-## About Laravel
+## Cara Menjalankan Project (Instalasi)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Berikut adalah langkah-langkah untuk menjalankan project frontend ini dari awal (instalasi Laravel):
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1.  **Pastikan PHP dan Composer Terinstall**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+    Sebelum memulai, pastikan komputer kamu sudah terinstall PHP (minimal versi 8.1) dan Composer (dependency manager untuk PHP). Kamu bisa cek versinya dengan perintah berikut di terminal:
 
-## Learning Laravel
+    ```bash
+    php -v
+    composer --version
+    ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    Jika belum terinstall, silakan unduh dan install dari website resminya ([PHP](https://www.php.net/downloads.php), [Composer](https://getcomposer.org/download/)).
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+2.  **Install Laravel**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    Buka terminal kamu, masuk ke direktori tempat kamu ingin menyimpan project ini, lalu jalankan perintah berikut untuk membuat project Laravel baru:
 
-## Laravel Sponsors
+    ```bash
+    composer create-project laravel/laravel simon-kehadiran-frontend
+    cd simon-kehadiran-frontend
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+    Ganti `simon-kehadiran-frontend` dengan nama project yang kamu inginkan.
 
-### Premium Partners
+3.  **Konfigurasi Koneksi Database**
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+    Meskipun frontend ini fokus pada tampilan dan berinteraksi dengan API, Laravel secara default memerlukan konfigurasi database. Kamu bisa menggunakan database dummy seperti SQLite agar tidak perlu setup database sungguhan.
 
-## Contributing
+    Buka file `.env` dan konfigurasi detail database kamu. Contoh untuk SQLite:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    ```dotenv
+    DB_CONNECTION=sqlite
+    DB_DATABASE=database.sqlite
+    ```
 
-## Code of Conduct
+    Jika kamu menggunakan database lain seperti MySQL atau PostgreSQL, sesuaikan konfigurasinya di file `.env`. Jangan lupa untuk menjalankan migrasi (meskipun mungkin tidak terlalu relevan untuk frontend murni ini):
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    ```bash
+    php artisan migrate
+    ```
 
-## Security Vulnerabilities
+4.  **Menjalankan Development Server**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    Untuk menjalankan project Laravel frontend, gunakan perintah berikut di terminal (dari direktori project):
 
-## License
+    ```bash
+    php artisan serve
+    ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    Ini akan menjalankan development server di `http://127.0.0.1:8000`. Buka alamat ini di browser kamu.
+
+## Menghubungkan ke Backend API (CodeIgniter)
+
+Frontend ini berkomunikasi dengan backend API (yang dalam kasus ini kamu buat dengan CodeIgniter) melalui HTTP request. Konfigurasi dasar untuk terhubung ke backend (misalnya, URL base API) biasanya diletakkan di file `.env` atau langsung di dalam kode controller/service yang melakukan panggilan API.
+
+Contoh penggunaan `Http` facade di controller Laravel untuk mengambil data dari backend:
+
+
+```use Illuminate\Support\Facades\Http;
+
+class UserController extends Controller
+{
+    public function index()
+    {
+        $response = Http::get(env('BACKEND_API_URL') . '/user');
+        $users = $response->json();
+        return view('user.index', compact('users'));
+    }
+}
