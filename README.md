@@ -63,12 +63,20 @@ Contoh penggunaan `Http` facade di controller Laravel untuk mengambil data dari 
 
 ```use Illuminate\Support\Facades\Http;```
 
-```class UserController extends``` ```Controller
-{
-    public function index()
-    {
-        $response = Http::get(env('BACKEND_API_URL') . '/user');
-        $users = $response->json();
-        return view('user.index', compact('users'));
-    }
-}```
+```class UserController extends Controller```
+
+```{```
+
+```public function index()```
+    
+`{`
+    
+```$response = Http::get(env('BACKEND_API_URL')``` ```. '/user');```
+
+```$users = $response->json();```
+
+```return view('user.index', compact('users'));```
+
+```}```
+
+```}```
