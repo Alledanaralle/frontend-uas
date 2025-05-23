@@ -33,9 +33,9 @@
     </div>
 
     <main class="flex-1 p-8 overflow-auto">
-        <h1 class="text-2xl font-bold mb-4">Data User</h1>
+        <h1 class="text-2xl font-bold mb-4">Data Matkul</h1>
         <button class="bg-green-800 text-white rounded p-2 mb-2">
-            Tambah Data User
+            Tambah Data Matkul
         </button>
 
         {{-- Pesan Sukses/Error dari Controller --}}
@@ -63,39 +63,37 @@
                 <table id="example" class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Password</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Level</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Matkul</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Matkul</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SKS</th>
                             <th scope="col" class="relative px-6 py-3">
                                 <span class="sr-only">Aksi</span>
                             </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse ($users as $user)
+                        @forelse ($matkul as $matkul)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $user['id_user'] }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $user['username'] }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $user['password'] }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $user['level'] }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $matkul['kode_matkul'] }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $matkul['nama_matkul'] }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $matkul['sks'] }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <button onclick="openEditModal({{ $user['id_user'] }}, '{{ $user['username'] }}', '{{ $user['level'] }}')"
+                                    <button onclick="openEditModal('{{ $matkul['kode_matkul'] }}', '{{ $matkul['nama_matkul'] }}', '{{ $matkul['sks'] }}')"
                                             class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-2">
                                         Edit
                                     </button>
-                                    <form action="{{ route('users.destroy', $user['id_user']) }}" method="POST" class="inline">
+                                    <form action="{{ route('matkul.destroy', $matkul['kode_matkul']) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                                                    onclick="return confirm('Kamu yakin mau menghapus user ini?')">
+                                                    onclick="return confirm('Kamu yakin mau menghapus matkul ini?')">
                                                 Hapus
                                             </button>
                                         </form>
                                 </td>
                             </tr>
                         @empty
-                            <tr><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" colspan="5">Data user kosong.</td></tr>
+                            <tr><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" colspan="5">Data matkul kosong.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -113,26 +111,25 @@
                     <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-left sm:mt-0 sm:ml-4 sm:text-left">
                             <h3 class="text-lg text-center leading-6 font-medium text-white" id="modal-title">
-                                Edit Data User
+                                Edit Data Matkul
                             </h3>
                             <div class="mt-2">
                                 {{-- Form akan disubmit ke Laravel Controller --}}
-                                <form class="space-y-4" action="{{ route('users.update') }}" method="POST">
+                                <form class="space-y-4" action="{{ route('matkul.update') }}" method="POST">
                                     @csrf
                                     @method('PUT') {{-- Ini penting untuk spoofing method PUT di Laravel --}}
-                                    <input type="hidden" name="id_user" id="edit-id-user">
                                     <div>
-                                        <label for="edit-username" class="block text-sm font-medium text-white">Username</label>
-                                        <input type="text" name="username" id="edit-username" class="mt-1 p-1.5  focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                    <input type="hidden" name="kode_matkul" id="edit-kode-matkul" class="mt-1 p-1.5  focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                     </div>
                                     <div>
-                                        <label for="edit-password" class="block text-sm font-medium text-white">Password</label>
-                                        <input type="password" name="password" id="edit-password" class="mt-1 p-1.5  focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Kosongkan jika tidak ingin diubah">
+                                        <label for="edit-nama-matkul" class="block text-sm font-medium text-white">Nama Matkul</label>
+                                        <input type="text" name="nama_matkul" id="edit-nama-matkul" class="mt-1 p-1.5  focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                     </div>
                                     <div>
-                                        <label for="edit-level" class="block text-sm font-medium text-white">Level</label>
-                                        <input type="text" name="level" id="edit-level" class="mt-1 p-1.5  focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        <label for="edit-sks" class="block text-sm font-medium text-white">SKS</label>
+                                        <input type="sks" name="sks" id="edit-sks" class="mt-1 p-1.5  focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md" >
                                     </div>
+
                                     <div class="flex mt-6 gap-2">
                                         <button type="button" onclick="closeEditModal()" class="w-full inline-flex justify-center rounded-md border border-gray-300 bg-white text-base font-medium text-black px-2 items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                             Batal
@@ -150,7 +147,7 @@
         </div>
     </div>
 
-    {{-- Modal Tambah User --}}
+    {{-- Modal Tambah Matkul --}}
         <div id="addModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
@@ -160,22 +157,22 @@
                         <div class="sm:flex sm:items-start">
                             <div class="mt-3 text-left sm:mt-0 sm:ml-4 sm:text-left">
                                 <h3 class="text-lg leading-6 font-medium text-center text-white" id="modal-title-add">
-                                    Tambah Data User Baru
+                                    Tambah Data Matkul Baru
                                 </h3>
                                 <div class="mt-2">
-                                    <form class="space-y-4" action="{{ route('users.store') }}" method="POST">
+                                    <form class="space-y-4" action="{{ route('matkul.store') }}" method="POST">
                                         @csrf
                                         <div>
-                                            <label for="add-username" class="block text-sm font-medium text-white">Username</label>
-                                            <input type="text" name="username" id="add-username" class="mt-1 p-1.5  focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+                                            <label for="add-kode-matkul" class="block text-sm font-medium text-white">Kode Matkul</label>
+                                        <input type="text" name="kode_matkul" id="add-kode-matkul" class="mt-1 p-1.5  focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                         </div>
                                         <div>
-                                            <label for="add-password" class="block text-sm font-medium text-white">Password</label>
-                                            <input type="password" name="password" id="add-password" class="mt-1 p-1.5  focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+                                            <label for="add-nama-matkul" class="block text-sm font-medium text-white">Nama Matkul</label>
+                                            <input type="text" name="nama_matkul" id="add-nama-matkul" class="mt-1 p-1.5  focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
                                         </div>
                                         <div>
-                                            <label for="add-level" class="block text-sm font-medium text-white">Level</label>
-                                            <input type="text" name="level" id="add-level" class="mt-1 p-1.5  focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+                                            <label for="add-sks" class="block text-sm font-medium text-white">SKS</label>
+                                            <input type="sks" name="sks" id="add-sks" class="mt-1 p-1.5  focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
                                         </div>
                                         <div class="flex mt-6 gap-2">
                                             <button type="button" onclick="closeAddModal()" class="w-full items-center px-4 inline-flex justify-center rounded-md border border-gray-300 bg-white text-base font-medium text-black hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
@@ -196,12 +193,11 @@
 
     <script>
         // Fungsi untuk membuka modal edit dan mengisi data
-        function openEditModal(userId, username, level) {
+        function openEditModal(kodeMatkul, namaMatkul, sks) {
             document.getElementById('editModal').classList.remove('hidden');
-            document.getElementById('edit-id-user').value = userId;
-            document.getElementById('edit-username').value = username;
-            document.getElementById('edit-level').value = level;
-            document.getElementById('edit-password').value = ''; // Kosongkan password
+            document.getElementById('edit-kode-matkul').value = kodeMatkul;
+            document.getElementById('edit-nama-matkul').value = namaMatkul;
+            document.getElementById('edit-sks').value = sks;
         }
 
         // Fungsi untuk menutup modal edit
@@ -216,7 +212,7 @@
                     document.getElementById('addModal').classList.add('hidden');
                 }
 
-                // Event listener untuk tombol "Tambah Data User"
+                // Event listener untuk tombol "Tambah Data Matkul"
                 document.querySelector('main > button').addEventListener('click', openAddModal);
 
                 $(document).ready(function() {

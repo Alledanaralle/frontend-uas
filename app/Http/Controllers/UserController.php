@@ -51,6 +51,41 @@ class UserController extends Controller
         }
     }
 
+    public function index_matkul()
+    {
+        try {
+            // Mengambil data user dari backend CodeIgniter
+            // Menambahkan orderBy("id_user", "asc") di backend CodeIgniter untuk pengurutan
+            $response = Http::get("http://localhost:8080/matkul");
+
+            // Memeriksa apakah request berhasil
+            if ($response->successful()) {
+                $matkul = collect($response->json())
+                    ->sortBy("kode_matkul")
+                    ->values();
+            } else {
+                $matkul = []; // Jika gagal, set array kosong
+                // Log error atau tampilkan pesan ke user
+                session()->flash(
+                    "error",
+                    "Gagal mengambil data dari backend. Pastikan backend kamu jalan yaa."
+                );
+            }
+
+            // Mengirim data user ke view welcome.blade.php
+            return view("matkul", compact("matkul"));
+        } catch (\Exception $e) {
+            // Menangkap exception jika ada masalah koneksi ke backend
+            $matkul = [];
+            session()->flash(
+                "error",
+                "Terjadi kesalahan saat menghubungi backend: " .
+                    $e->getMessage()
+            );
+            return view("matkul", compact("matkul"));
+        }
+    }
+
     /**
      * Mengupdate data user melalui backend CodeIgniter.
      *
@@ -108,6 +143,60 @@ class UserController extends Controller
                 );
         }
     }
+
+    /**
+     * Mengupdate data user melalui backend CodeIgniter.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+
+    public function update_matkul(Request $request)
+    {
+        // Mengambil data dari form modal
+        $kode_matkul = $request->input("kode_matkul");
+        $namaMatkul = $request->input("nama_matkul");
+        $sks = $request->input("sks");
+
+        // Data yang akan dikirim ke backend CodeIgniter
+        $dataToUpdate = [
+            "nama_matkul" => $namaMatkul,
+            "sks" => $sks,
+        ];
+
+        try {
+            // Mengirim request PUT ke backend CodeIgniter
+            $response = Http::put(
+                "http://localhost:8080/matkul/{$kode_matkul}",
+                $dataToUpdate
+            );
+
+            // Memeriksa apakah update berhasil di backend
+            if ($response->successful()) {
+                return redirect()
+                    ->route("dashboard_matkul")
+                    ->with("success", "Data matkul berhasil diupdate!");
+            } else {
+                // Jika backend mengembalikan error
+                $errorMessage =
+                    $response->json()["messages"]["error"] ??
+                    "Gagal mengupdate data matkul di backend.";
+                return redirect()
+                    ->route("dashboard_matkul")
+                    ->with("error", $errorMessage);
+            }
+        } catch (\Exception $e) {
+            // Menangkap exception jika ada masalah koneksi ke backend
+            return redirect()
+                ->route("dashboard_matkul")
+                ->with(
+                    "error",
+                    "Terjadi kesalahan saat menghubungi backend: " .
+                        $e->getMessage()
+                );
+        }
+    }
+
     /**
      * Menghapus data user melalui backend CodeIgniter.
      *
@@ -126,7 +215,7 @@ class UserController extends Controller
             } else {
                 $errorMessage =
                     $response->json()["messages"]["error"] ??
-                    "Gagal menghapus data user di backend.";
+                    "Gagal menghapus data matkul di backend.";
                 return redirect()
                     ->route("dashboard")
                     ->with("error", $errorMessage);
@@ -134,6 +223,40 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return redirect()
                 ->route("dashboard")
+                ->with(
+                    "error",
+                    "Terjadi kesalahan saat menghubungi backend: " .
+                        $e->getMessage()
+                );
+        }
+    }
+
+    /**
+     * Menghapus data user melalui backend CodeIgniter.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy_matkul($id)
+    {
+        try {
+            $response = Http::delete("http://localhost:8080/matkul/{$id}");
+
+            if ($response->successful()) {
+                return redirect()
+                    ->route("dashboard_matkul")
+                    ->with("success", "Data matkul berhasil dihapus!");
+            } else {
+                $errorMessage =
+                    $response->json()["messages"]["error"] ??
+                    "Gagal menghapus data matkul di backend.";
+                return redirect()
+                    ->route("dashboard_matkul")
+                    ->with("error", $errorMessage);
+            }
+        } catch (\Exception $e) {
+            return redirect()
+                ->route("dashboard_matkul")
                 ->with(
                     "error",
                     "Terjadi kesalahan saat menghubungi backend: " .
@@ -181,6 +304,53 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return redirect()
                 ->route("dashboard")
+                ->with(
+                    "error",
+                    "Terjadi kesalahan saat menghubungi backend: " .
+                        $e->getMessage()
+                );
+        }
+    }
+
+    /**
+     * Menyimpan data user baru melalui backend CodeIgniter.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store_matkul(Request $request)
+    {
+        $kodeMatkul = $request->input("kode_matkul");
+        $namaMatkul = $request->input("nama_matkul");
+        $sks = $request->input("sks");
+
+        $dataToSend = [
+            "kode_matkul" => $kodeMatkul,
+            "nama_matkul" => $namaMatkul,
+            "sks" => $sks,
+        ];
+
+        try {
+            $response = Http::asForm()->post(
+                "http://localhost:8080/matkul",
+                $dataToSend
+            );
+
+            if ($response->successful()) {
+                return redirect()
+                    ->route("dashboard_matkul")
+                    ->with("success", "Data matkul berhasil ditambahkan!");
+            } else {
+                $errorMessage =
+                    $response->json()["messages"]["error"] ??
+                    "Gagal menambahkan data matkul di backend.";
+                return redirect()
+                    ->route("dashboard_matkul")
+                    ->with("error", $errorMessage);
+            }
+        } catch (\Exception $e) {
+            return redirect()
+                ->route("dashboard_matkul")
                 ->with(
                     "error",
                     "Terjadi kesalahan saat menghubungi backend: " .
