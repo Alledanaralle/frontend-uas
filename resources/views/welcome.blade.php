@@ -4,6 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Simon Kehadiran</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- DataTables JS -->
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -52,7 +57,7 @@
 
         <div class="shadow mt-2 overflow-hidden border-b border-gray-200 sm:rounded-lg">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
+                <table id="example" class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
@@ -210,6 +215,18 @@
 
                 // Event listener untuk tombol "Tambah Data User"
                 document.querySelector('main > button').addEventListener('click', openAddModal);
+
+                $(document).ready(function() {
+                            // Initialize the DataTable
+                            var table = $('#example').DataTable();
+
+                            // Example of a global search
+                            $('#searchInput').on('keyup', function() {
+                                table.search(this.value).draw();
+                            });
+
+
+                        });
     </script>
 </body>
 </html>
